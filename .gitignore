@@ -1,0 +1,13 @@
+# ignore font file
+fonts/
+*.otf
+*.ttf
+
+# ignore test dir
+test/
+
+# ignore Python 
+__pycache__/
+
+# ignore VSCode
+.venv/
