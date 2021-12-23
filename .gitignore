@@ -5,6 +5,7 @@ fonts/
 
 # ignore test dir
 test/
+test.bat
 
 # ignore Python 
 __pycache__/
