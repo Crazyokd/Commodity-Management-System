@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as dpg
 from util.set_font import set_font
-
+import dearpygui.demo as demo
 
 def create_common_window():
     # set three window on primary window
@@ -44,6 +44,10 @@ def create_table():
             with dpg.table_row():
                 for j in range(0, 3):
                     dpg.add_text(f"Row{i} Column{j}")
+
+
+def show_demo():
+    demo.show_demo()
 
 
 dpg.create_context()
