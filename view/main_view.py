@@ -41,11 +41,10 @@ def show_main_view():
         with dpg.group(horizontal=True, parent="main", tag="intro"):
             dpg.add_loading_indicator(circle_count=5)
             with dpg.group():
-                dpg.add_text(f'Dear PyGui ({dpg.get_dearpygui_version()}) is used in this project. ')
+                dpg.add_text(f'Dear PyGui ({dpg.get_dearpygui_version()}) is used in this project. ', bullet=True, indent=5)
+                dpg.add_text("This project has been uploaded to GitHub.", bullet=True, indent=5)
                 with dpg.group(horizontal=True):
-                    dpg.add_text("This project has been uploaded to GitHub.")
-                with dpg.group(horizontal=True):
-                    dpg.add_text("The code of this project can be found here:")
+                    dpg.add_text("The code of this project can be found here:", bullet=True, indent=5)
                     _hyperlink("CMS", "https://github.com/Crazyokd/Commodity-Management-System")
 
         dpg.bind_item_font("intro",font_en)

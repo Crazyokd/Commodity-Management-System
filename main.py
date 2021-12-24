@@ -63,7 +63,7 @@ def start_up_system():
             dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, [29, 151, 236, 25])
             dpg.add_theme_color(dpg.mvThemeCol_Text, [29, 151, 236])
 
-    dpg.create_viewport(title='SHOP', width=600, height=700)
+    dpg.create_viewport(title='SHOP', width=650, height=700)
     dpg.set_viewport_resizable(False) # 设置窗口无法缩放
     dpg.set_viewport_pos([300,100])     # 设置窗口位置
 
