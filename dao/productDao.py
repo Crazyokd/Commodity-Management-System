@@ -36,7 +36,6 @@ def select_id():
     try:
         rows = cur.execute(sql)
         if rows > 0:
-            print('查询成功')
             t = cur.fetchall()
             conn.commit()
             return t
@@ -142,6 +141,28 @@ def is_pro_exist(pro_id):
             return True
         else:
             return False
+    except:
+        print(traceback.format_exc())
+        conn.rollback()
+        return False
+    finally:
+        cur.close()
+        conn.close()
+
+
+def select_by_id(id):
+    conn = get_mysql_conn()
+    cur = conn.cursor()
+    sql = "select pro_name,pro_num,pro_price from products where pro_id = '%s';" % (id)
+    try:
+        rows = cur.execute(sql)
+        re = cur.fetchall()
+        if rows > 0:
+            conn.commit()
+            return re
+        else:
+            return False
+
     except:
         print(traceback.format_exc())
         conn.rollback()

@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as dpg
 
-from dao.productDao import delete_pro, insert_pro, select_all, select_id, update_bd, select_by_key_word
+from dao.productDao import delete_pro, insert_pro, select_all, select_by_id, select_id, update_bd, select_by_key_word
 
 
 def return_pre_view():
@@ -104,6 +104,25 @@ def get_ids():
     return res
         
 
+def get_info_from_id(sender, app_data, user_data):
+    try:
+        dpg.delete_item("gmg")
+    except:
+        pass
+
+    t=select_by_id(app_data)
+    with dpg.group(parent="gm", tag="gmg"):
+        with dpg.group():
+            dpg.add_text("新的商品名称：")
+            dpg.add_input_text(tag="gm_name",hint=t[0][0])
+        with dpg.group():
+            dpg.add_text("新的商品价格：")
+            dpg.add_input_text(tag="gm_price",hint=t[0][2])
+        with dpg.group():
+            dpg.add_text("新的商品数量：")
+            dpg.add_input_text(tag="gm_num", hint=t[0][1])
+    
+
 
 def show_bgmain_view():
     is_first_preview = True
@@ -111,7 +130,7 @@ def show_bgmain_view():
     with dpg.group(tag="ct", parent="main"):
         dpg.add_text("后台管理界面")
         
-        with dpg.collapsing_header(label="商品管理", tag="gm"):
+        with dpg.collapsing_header(label="商品管理", tag="goods_management"):
             with dpg.tree_node(label="商品上架"):
                 with dpg.group():
                     # dpg.add_text("商品名称：")
@@ -127,26 +146,16 @@ def show_bgmain_view():
             with dpg.tree_node(label="商品下架"):
                 with dpg.group():
                     
-                    # items = ("A","B","C","D","E","F","G","H","I","J","K","L","M" "O","P","Q","R","S","T","U","V","W","X","Y","Z")
                     dpg.add_combo(get_ids(), label="商品ID", height_mode=dpg.mvComboHeight_Small, tag="gd_id")
-                    # dpg.add_text("商品ID：")
-                    # dpg.add_input_text(tag="gd_id")
-        
-                dpg.add_button(label="下架商品",callback=delete_goods)
+                    dpg.add_button(label="下架商品",callback=delete_goods)
 
             with dpg.tree_node(label="商品修改"):
-                with dpg.group():
-                    dpg.add_text("待修改的商品ID：")
-                    dpg.add_drag_int(tag="gm_id")
-                with dpg.group():
-                    dpg.add_text("新的商品名称：")
-                    dpg.add_input_text(tag="gm_name")
-                with dpg.group():
-                    dpg.add_text("新的商品价格：")
-                    dpg.add_input_text(tag="gm_price")
-                with dpg.group():
-                    dpg.add_text("新的商品数量：")
-                    dpg.add_input_text(tag="gm_num")
+                with dpg.group(tag="gm"):
+                    with dpg.group():
+                        dpg.add_text("待修改的商品ID：")
+                        dpg.add_combo(get_ids(), callback=get_info_from_id)
+                        # dpg.add_drag_int(tag="gm_id")
+                    
                 dpg.add_button(label="修改商品",callback=modify_goods)
 
             with dpg.tree_node(label="商品预览"):
