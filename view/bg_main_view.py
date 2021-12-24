@@ -46,7 +46,11 @@ def modify_goods():
 
 
 def preview_goods():
-    with dpg.table(parent="sa"):
+    try:
+        dpg.delete_item("gpt")
+    except:
+        pass
+    with dpg.table(parent="gp", tag="gpt"):
         # use add_table_column to add columns to the table,
         # table columns use child slot 0
         dpg.add_table_column(label="pro_id")
@@ -66,7 +70,7 @@ def preview_goods():
 
 def query_goods():
     try:
-        dpg.delete_item("table")
+        dpg.delete_item("gqt")
     except:
         pass
     print("模糊查询")
@@ -74,7 +78,7 @@ def query_goods():
         keyword = str(dpg.get_value("keyword"))
     except:
         print("类型转换异常")
-    with dpg.table(tag="table",parent="gq"):
+    with dpg.table(parent="gq", tag="gqt"):
         # use add_table_column to add columns to the table,
         # table columns use child slot 0
         dpg.add_table_column(label="pro_id")
@@ -93,6 +97,7 @@ def query_goods():
 
 
 def show_bgmain_view():
+    is_first_preview = True
     # 后台管理界面
     with dpg.group(tag="ct", parent="main"):
         dpg.add_text("后台管理界面")
@@ -112,6 +117,9 @@ def show_bgmain_view():
                 
             with dpg.tree_node(label="商品下架"):
                 with dpg.group():
+                    
+                    # items = ("A","B","C","D","E","F","G","H","I","J","K","L","M" "O","P","Q","R","S","T","U","V","W","X","Y","Z")
+                    # combo_id = dpg.add_combo(items, label="combo", height_mode=dpg.mvComboHeight_Small)
                     dpg.add_text("商品ID：")
                     dpg.add_input_text(tag="gd_id")
         
@@ -133,7 +141,11 @@ def show_bgmain_view():
                 dpg.add_button(label="修改商品",callback=modify_goods)
 
             with dpg.tree_node(label="商品预览"):
-                preview_goods()
+                with dpg.group(tag="gp"):
+                    dpg.add_button(label="刷新", callback=preview_goods)
+                    if is_first_preview:
+                        preview_goods()
+                        is_first_preview = False
 
             with dpg.tree_node(label="商品查询"):
                 with dpg.group(tag="gq"):
