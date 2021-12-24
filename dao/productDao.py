@@ -40,12 +40,6 @@ def select_all():
             t = cur.fetchall()
             conn.commit()
             return t
-            # tu = ('商品ID', '商品名称', '商品数量', '商品价格')
-            # print_tuple(tu)
-            # for i in range(0, rows):
-            #     t = cur.fetchone()
-            #     print_tuple(t)
-            #     conn.commit()
         else:
             return False
 
@@ -138,8 +132,9 @@ def is_pro_exist(pro_id):
 def select_by_key_word(keyword='0'):
     conn = get_mysql_conn()
     cur = conn.cursor()
-    sql = "select* from products where pro_id like'%s' or pro_name like '%s' or pro_price like '%s' order " \
-          "by pro_price desc;" % ("%"+keyword+"%", "%"+keyword+"%","%"+keyword+"%")
+    # id和姓名采用模糊查询，价格和数量采用精确查询
+    sql = "select * from products where pro_id like'%s' or pro_name like '%s' or pro_price = '%s' or pro_num = '%s' " \
+          "order by pro_price desc;" % ("%"+keyword+"%", "%"+keyword+"%", keyword, keyword)
     try:
         rows = cur.execute(sql)
         re = cur.fetchall()
@@ -147,11 +142,6 @@ def select_by_key_word(keyword='0'):
             print("模糊查询结果：")
             conn.commit()
             return re
-            # tu = ('商品ID', '商品名称', '商品数量', '商品价格')
-            # print_tuple(tu)
-            # for i in range(0, len(re)):
-            #     print_tuple(re[i])
-            # conn.commit()
         else:
             return False
 
