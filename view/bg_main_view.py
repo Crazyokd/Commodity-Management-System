@@ -3,6 +3,7 @@ import dearpygui.dearpygui as dpg
 from dao.productDao import delete_pro, insert_pro, select_all, select_by_id, select_id, update_bd, select_by_key_word
 
 
+
 def return_pre_view():
     from view.main_view import show_main_view
     dpg.delete_item("ct")
@@ -20,6 +21,7 @@ def add_goods():
         price = float(dpg.get_value("ga_price"))
         num = int(dpg.get_value("ga_num"))
         insert_pro(name,num,price)
+        update_combo()
     except:
         print("数值类型转换异常")
         
@@ -29,6 +31,7 @@ def delete_goods():
     try:
         id = int(dpg.get_value("gd_id"))
         delete_pro(id)
+        update_combo()
     except:
         print("数值转换异常")
         
@@ -79,17 +82,13 @@ def query_goods():
     except:
         print("类型转换异常")
     with dpg.table(parent="gq", tag="gqt"):
-        # use add_table_column to add columns to the table,
-        # table columns use child slot 0
+
         dpg.add_table_column(label="pro_id")
         dpg.add_table_column(label="pro_name")
         dpg.add_table_column(label="pro_num")
         dpg.add_table_column(label="pro_price")
 
         t = select_by_key_word(keyword)
-        # add_table_next_column will jump to the next row
-        # once it reaches the end of the columns
-        # table next column use slot 1
         for i in range(0, len(t)):
             with dpg.table_row():
                 for j in range(0, len(t[i])):
@@ -104,6 +103,33 @@ def get_ids():
     return res
         
 
+def update_combo():
+    update_combo_dg()
+    update_combo_mg()
+
+def update_combo_dg():
+    try:
+        dpg.delete_item("gd_id")
+    except:
+        pass
+
+    dpg.add_combo(get_ids(), label="商品ID", height_mode=dpg.mvComboHeight_Small, before="delete_goods", tag="gd_id")
+
+
+def update_combo_mg():
+    try:
+        dpg.delete_item("gm_id")
+        dpg.delete_item("gmg")
+    except:
+        pass
+    
+    _before_id="modify_goods"
+    # if dpg.get_item_alias("gmg") is not None:
+    #     _before_id="gmg"
+    dpg.add_combo(get_ids(), label="商品ID", height_mode=dpg.mvComboHeight_Small, before=_before_id, callback=get_info_from_id, tag="gm_id")
+    
+        
+
 def get_info_from_id(sender, app_data, user_data):
     try:
         dpg.delete_item("gmg")
@@ -111,21 +137,22 @@ def get_info_from_id(sender, app_data, user_data):
         pass
 
     t=select_by_id(app_data)
-    with dpg.group(parent="gm", tag="gmg"):
+    with dpg.group(parent="gm", before="modify_goods", tag="gmg"):
         with dpg.group():
             dpg.add_text("新的商品名称：")
-            dpg.add_input_text(tag="gm_name",hint=t[0][0])
+            dpg.add_input_text(tag="gm_name", hint=t[0][0], default_value=t[0][0])
         with dpg.group():
             dpg.add_text("新的商品价格：")
-            dpg.add_input_text(tag="gm_price",hint=t[0][2])
+            dpg.add_input_text(tag="gm_price",hint=t[0][2], default_value=t[0][2])
         with dpg.group():
             dpg.add_text("新的商品数量：")
-            dpg.add_input_text(tag="gm_num", hint=t[0][1])
+            dpg.add_input_text(tag="gm_num", hint=t[0][1], default_value=t[0][1])
     
 
 
 def show_bgmain_view():
     is_first_preview = True
+
     # 后台管理界面
     with dpg.group(tag="ct", parent="main"):
         dpg.add_text("后台管理界面")
@@ -144,20 +171,17 @@ def show_bgmain_view():
                 dpg.add_button(label="上架商品",callback=add_goods)
                 
             with dpg.tree_node(label="商品下架"):
-                with dpg.group():
+                with dpg.group(tag="gdg"):
                     
-                    dpg.add_combo(get_ids(), label="商品ID", height_mode=dpg.mvComboHeight_Small, tag="gd_id")
-                    dpg.add_button(label="下架商品",callback=delete_goods)
+                    update_combo_dg()
+                    dpg.add_button(label="下架商品",callback=delete_goods, tag="delete_goods")
 
             with dpg.tree_node(label="商品修改"):
                 with dpg.group(tag="gm"):
                     with dpg.group():
-                        dpg.add_text("待修改的商品ID：")
-                        dpg.add_combo(get_ids(), callback=get_info_from_id)
-                        # dpg.add_drag_int(tag="gm_id")
-                    
-                dpg.add_button(label="修改商品",callback=modify_goods)
-
+                        update_combo_mg()
+                    dpg.add_button(label="修改商品", callback=modify_goods, tag="modify_goods")
+            
             with dpg.tree_node(label="商品预览"):
                 with dpg.group(tag="gp"):
                     dpg.add_button(label="刷新", callback=preview_goods)
