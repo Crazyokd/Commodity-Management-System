@@ -106,6 +106,7 @@ def get_ids():
 def update_combo():
     update_combo_dg()
     update_combo_mg()
+    preview_goods()
 
 def update_combo_dg():
     try:
@@ -184,10 +185,11 @@ def show_bgmain_view():
             
             with dpg.tree_node(label="商品预览"):
                 with dpg.group(tag="gp"):
-                    dpg.add_button(label="刷新", callback=preview_goods)
-                    if is_first_preview:
-                        preview_goods()
-                        is_first_preview = False
+                    preview_goods()
+                    # dpg.add_button(label="刷新", callback=preview_goods)
+                    # if is_first_preview:
+                    #     preview_goods()
+                    #     is_first_preview = False
 
             with dpg.tree_node(label="商品查询"):
                 with dpg.group(tag="gq"):
