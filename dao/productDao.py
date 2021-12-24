@@ -5,6 +5,8 @@ from util.db_utill import get_mysql_conn
 
 
 def insert_pro(pro_name="undefined", pro_num=1, pro_price=1.1):
+    """向数据库中插入一条数据
+    """
     conn = get_mysql_conn()
     cur = conn.cursor()
 
@@ -15,8 +17,6 @@ def insert_pro(pro_name="undefined", pro_num=1, pro_price=1.1):
         if rows > 0:
             print('商品插入成功')
             conn.commit()
-            # print("插入后的货架：")
-            # select_all()
         else:
             return False
 
@@ -30,6 +30,8 @@ def insert_pro(pro_name="undefined", pro_num=1, pro_price=1.1):
 
 
 def select_id():
+    """查询所有ID
+    """
     conn = get_mysql_conn()
     cur = conn.cursor()
     sql = "select pro_id from products order by pro_id asc"
@@ -51,13 +53,14 @@ def select_id():
 
 
 def select_all():
+    """查询所有数据
+    """
     conn = get_mysql_conn()
     cur = conn.cursor()
     sql = "select pro_id,pro_name,pro_num,pro_price from products order by pro_num desc"
     try:
         rows = cur.execute(sql)
         if rows > 0:
-            print('查询成功')
             t = cur.fetchall()
             conn.commit()
             return t
@@ -74,6 +77,8 @@ def select_all():
 
 
 def delete_pro(pro_id):
+    """根据ID删除一条数据
+    """
     if not is_pro_exist(pro_id):
         print('该商品ID不存在!')
         return False
@@ -98,6 +103,8 @@ def delete_pro(pro_id):
 
 
 def update_bd(pro_id="00001", pro_name="undefined", pro_num=3, pro_price=3.159):
+    """根据ID更新一条数据
+    """
     if not is_pro_exist(pro_id):
         print('ID ', pro_id, '不存在')
         return False
@@ -122,14 +129,16 @@ def update_bd(pro_id="00001", pro_name="undefined", pro_num=3, pro_price=3.159):
         conn.close()
 
 
-def print_tuple(t):
-    for i in range(0, len(t)):
-        temp = str(t[i])[0:15]
-        print("{:15}\t".format(temp), end=' ')
-    print('')
+# def print_tuple(t):
+#     for i in range(0, len(t)):
+#         temp = str(t[i])[0:15]
+#         print("{:15}\t".format(temp), end=' ')
+#     print('')
 
 
 def is_pro_exist(pro_id):
+    """根据ID判断数据是否存在
+    """
     conn = get_mysql_conn()
     cur = conn.cursor()
     sql = "select count(*) from products where pro_id='%s'" % pro_id
@@ -151,6 +160,8 @@ def is_pro_exist(pro_id):
 
 
 def select_by_id(id):
+    """通过ID查询一条数据
+    """
     conn = get_mysql_conn()
     cur = conn.cursor()
     sql = "select pro_name,pro_num,pro_price from products where pro_id = '%s';" % (id)
@@ -173,6 +184,8 @@ def select_by_id(id):
 
 
 def select_by_key_word(keyword='0'):
+    """通过关键字查询数据
+    """
     conn = get_mysql_conn()
     cur = conn.cursor()
     # id和姓名采用模糊查询，价格和数量采用精确查询
@@ -195,4 +208,3 @@ def select_by_key_word(keyword='0'):
     finally:
         cur.close()
         conn.close()
-
