@@ -46,6 +46,17 @@ def create_table():
                     dpg.add_text(f"Row{i} Column{j}")
 
 
+def create_list():
+    dpg.add_text("Notes")
+    dpg.add_text("Colormaps belong to a mvColorMapRegistry.", indent=20)
+    with dpg.group(horizontal=True):
+        dpg.add_text("Showing the registry will help with debugging. Press ", bullet=True, indent=20)
+        dpg.add_button(label="here", small=True, callback=lambda:dpg.show_item("__demo_colormap_registry"))
+    dpg.add_text("Colormaps are applied with 'bind_colormap(item_id, colormap_id)", bullet=True, indent=20)
+    dpg.add_text("Colormaps can be applied to mvPlot, mvColorMapButton, mvColorMapSlider, mvColorMapScale", bullet=True, indent=20)
+    dpg.add_text("Colormaps can be sampled with 'sample_colormap(colormap_id, t)' (0<t<1)", bullet=True, indent=20)
+    dpg.add_text("Colormaps can be sampled by index with 'get_colormap_color(colormap_id, index)'", bullet=True, indent=20)    
+
 def show_demo():
     demo.show_demo()
 
@@ -59,7 +70,7 @@ with dpg.window(tag="pw"):
     dpg.add_text("中国") # 28
     # create_child_window()
     # create_table()
-
+    create_list()
 
 print(dpg.get_item_children("pw"))
 
