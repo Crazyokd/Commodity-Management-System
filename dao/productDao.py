@@ -29,6 +29,28 @@ def insert_pro(pro_name="undefined", pro_num=1, pro_price=1.1):
         conn.close()
 
 
+def select_id():
+    conn = get_mysql_conn()
+    cur = conn.cursor()
+    sql = "select pro_id from products order by pro_id asc"
+    try:
+        rows = cur.execute(sql)
+        if rows > 0:
+            print('查询成功')
+            t = cur.fetchall()
+            conn.commit()
+            return t
+        else:
+            return False
+    except:
+        print(traceback.format_exc())
+        conn.rollback()
+        return False
+    finally:
+        cur.close()
+        conn.close()
+
+
 def select_all():
     conn = get_mysql_conn()
     cur = conn.cursor()

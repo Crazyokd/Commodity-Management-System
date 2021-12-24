@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as dpg
 
-from dao.productDao import delete_pro, insert_pro, select_all, update_bd, select_by_key_word
+from dao.productDao import delete_pro, insert_pro, select_all, select_id, update_bd, select_by_key_word
 
 
 def return_pre_view():
@@ -96,6 +96,15 @@ def query_goods():
                     dpg.add_text(t[i][j])
 
 
+def get_ids():
+    t=select_id()
+    res = list()
+    for i in range(len(t)):
+        res.append(t[i][0])
+    return res
+        
+
+
 def show_bgmain_view():
     is_first_preview = True
     # 后台管理界面
@@ -119,9 +128,9 @@ def show_bgmain_view():
                 with dpg.group():
                     
                     # items = ("A","B","C","D","E","F","G","H","I","J","K","L","M" "O","P","Q","R","S","T","U","V","W","X","Y","Z")
-                    # combo_id = dpg.add_combo(items, label="combo", height_mode=dpg.mvComboHeight_Small)
-                    dpg.add_text("商品ID：")
-                    dpg.add_input_text(tag="gd_id")
+                    dpg.add_combo(get_ids(), label="商品ID", height_mode=dpg.mvComboHeight_Small, tag="gd_id")
+                    # dpg.add_text("商品ID：")
+                    # dpg.add_input_text(tag="gd_id")
         
                 dpg.add_button(label="下架商品",callback=delete_goods)
 
