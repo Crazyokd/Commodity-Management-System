@@ -28,7 +28,10 @@ pip install -r requirements.txt
 ```shell
 python3 main.py
 ```
-
+## Tag
+- 1.0 —— 基于GUI完成CRUD。
+- 2.0 —— 大幅优化GUI设计。
+- 2.1 —— 在2.0的基础上优化用户体验（~~智能补全？~~）
 ## 其他目录
 - [test_dpg](test_dpg)：当本系统需要用到dearpygui时，将会对涉及到的相关功能进行测试，该文件夹中存放的就是这样一类代码。
 
